@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Language Test</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to the English Language Test</h1>
+        <button id="startTestBtn">Start Test</button>
+        <div id="testContainer" class="hidden">
+            <!-- Questions and answers will be dynamically added here -->
+        </div>
+        <button id="nextBtn">Next</button>
+        <div id="resultDisplay" class="hidden">
+            <!-- Result will be displayed here -->
+        </div>
+        <button id="goHomeBtn" class="hidden">Go Home</button>
+    </div>
+
+    <script>
+        const questions = [
+          
+    { type: 'grammar', question: 'What is the capital of France?', options: ['Paris', 'London', 'Berlin', 'Madrid'], answer: 'Paris' },
+    { type: 'grammar', question: 'London is located in which country?', options: ['France', 'Germany', 'Italy', 'UK'], answer: 'UK' },
+    // Add more grammar questions here
+    { type: 'grammar', question: 'What is the plural form of "child"?', options: ['Childs', 'Children', 'Childies', 'Childsies'], answer: 'Children' },
+    // Add more grammar questions as needed
+    { type: 'grammar', question: 'What is the comparative form of "good"?', options: ['Better', 'Gooder', 'Best', 'Goodest'], answer: 'Better' },
+    { type: 'grammar', question: 'Which word is a pronoun?', options: ['Table', 'Cat', 'He', 'Book'], answer: 'He' },
+    { type: 'grammar', question: 'What is the past tense of "eat"?', options: ['Ate', 'Eaten', 'Eat', 'Eating'], answer: 'Ate' },
+    { type: 'grammar', question: 'Choose the correct sentence:', options: ['He plays football every Sunday.', 'He play football every Sunday.', 'He played football every Sunday.'], answer: 'He plays football every Sunday.' },
+    { type: 'grammar', question: 'What is the superlative form of "big"?', options: ['Bigger', 'Biggest', 'Big', 'Bigly'], answer: 'Biggest' },
+    { type: 'grammar', question: 'Which word is a conjunction?', options: ['And', 'House', 'Jump', 'Fast'], answer: 'And' },
+    { type: 'grammar', question: 'What is the present participle of "swim"?', options: ['Swimming', 'Swum', 'Swam', 'Swims'], answer: 'Swimming' },
+    { type: 'grammar', question: 'Identify the adverb in the sentence: "She sings beautifully."', options: ['Sings', 'She', 'Beautifully', 'The'], answer: 'Beautifully' },
+    // Add more grammar questions here
+    // Add 90 more questions here
+];
+
+
+        let currentQuestionIndex = 0;
+        let correctAnswers = 0; // Track correct answers
+
+        const startTestBtn = document.getElementById('startTestBtn');
+        const testContainer = document.getElementById('testContainer');
+        const nextBtn = document.getElementById('nextBtn');
+        const resultDisplay = document.getElementById('resultDisplay');
+        const goHomeBtn = document.getElementById('goHomeBtn');
+
+        startTestBtn.addEventListener('click', function() {
+            startTestBtn.style.display = 'none';
+            testContainer.classList.remove('hidden');
+            showQuestion();
+        });
+
+        function showQuestion() {
+    const question = questions[currentQuestionIndex];
+    testContainer.innerHTML = '';
+
+    // Display question number
+    const questionNumber = currentQuestionIndex + 1;
+    testContainer.innerHTML += `<h3>Question ${questionNumber}/${questions.length}</h3>`;
+
+    if (question.type === 'grammar') {
+        const optionsHTML = question.options.map(option => `<input type="radio" name="answer" value="${option}">${option}<br>`).join('');
+        testContainer.innerHTML += `<h3>${question.question}</h3>${optionsHTML}`;
+    } else if (question.type === 'typing') {
+        testContainer.innerHTML += `<textarea id="typedText" rows="4" cols="50"></textarea>`;
+    } else if (question.type === 'reading') {
+        const optionsHTML = question.options.map(option => `<input type="radio" name="answer" value="${option}">${option}<br>`).join('');
+        testContainer.innerHTML += `<p>${question.paragraph}</p><h3>${question.question}</h3>${optionsHTML}`;
+    } else if (question.type === 'listening') {
+        testContainer.innerHTML += `<audio controls><source src="${question.audioSrc}" type="audio/mpeg">Your browser does not support the audio element.</audio><br>${question.question}<br>`;
+        const optionsHTML = question.options.map(option => `<input type="radio" name="answer" value="${option}">${option}<br>`).join('');
+        testContainer.innerHTML += optionsHTML;
+    }
+}
+
+        
+
+        nextBtn.addEventListener('click', function() {
+            const selectedAnswer = document.querySelector('input[name="answer"]:checked');
+
+            if (selectedAnswer) {
+                const question = questions[currentQuestionIndex];
+
+                if (question.answer === selectedAnswer.value) {
+                    correctAnswers++; // Increment correct answers count
+                }
+
+                currentQuestionIndex++;
+
+                if (currentQuestionIndex < questions.length) {
+                    showQuestion();
+                } else {
+                    displayResult();
+                }
+            } else {
+                alert('Please select an answer.');
+            }
+        });
+
+        function displayResult() {
+            resultDisplay.innerHTML = `<h2>Test Result</h2><p>You scored ${correctAnswers} of ${questions.length}</p>`;
+            resultDisplay.classList.remove('hidden');
+            goHomeBtn.classList.remove('hidden');
+        }
+
+        goHomeBtn.addEventListener('click', function() {
+            window.location.href = 'index.html'; // Replace 'index.html' with your actual homepage URL
+        });
+    </script>
+</body>
+</html>
